@@ -1,0 +1,343 @@
+<!--This webapp is a collaboration between AS and RR-->
+<!DOCTYPE html>
+<html>
+  <head>
+		<!--Math.min.js 10.4.2-->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.4.2/math.min.js" integrity="sha512-8tb1P2USXYzay395iBOA30Jm/ZCyXYZDziXCLZSIEz6QWuIaH3Q3zAVGtWCCtz49i920bI7kRI7+bgw1H+6wPw==" 
+			crossorigin="anonymous" 
+			referrerpolicy="no-referrer"></script>
+		<!--ubuntu font -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+		<!-- bootstrap 5 -->
+		<!-- Latest compiled and minified CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Math Racer!</title>
+    <style>
+    	/*This webapp is a collaboration between AS and RR*/
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+mark
+{
+	background-color: yellow; 
+}
+h1, h2, h3, h4, h5, h6, p, text
+{
+	font-family: 'Ubuntu', sans-serif;
+	text-align: center; 
+	color: ghostwhite; 
+	text-shadow: 2px 2px 2px grey; 
+}
+body
+{
+	background-color: black; 
+}
+a, button
+{
+	background-color: indigo; 
+	padding: 10px 50px 10px 50px; 
+	transition-duration: 200ms; 
+	color: ghostwhite; 
+	border-color: black; 
+	border-radius: 10px; 
+	font-size: 20px; 
+}
+#option0
+{
+	background-color: firebrick;
+	position: relative; 
+	top: -70px; 
+	visibility: hidden; 
+}
+#option1
+{
+	background-color: forestgreen; 
+	position: relative; 
+	top: -70px; 
+	visibility: hidden; 
+}
+#option2
+{
+	background-color: darkslateblue; 
+	position: relative; 
+	top: -70px; 
+	visibility: hidden; 
+}
+#option3
+{
+	background-color: teal; 
+	position: relative; 
+	top: -70px; 
+	visibility: hidden; 
+}
+#option0:hover, #option1:hover, #option2:hover, #option3:hover, a, button:hover
+{
+	background-color: darkgoldenrod; 
+	transition-duration: 200ms; 
+}
+#start
+{
+	visibility: visible; 
+	padding: 10px 80px 10px 80px; 
+	
+}
+#questionTimer
+{
+	visibility: hidden; 
+}
+#winText
+{
+	font-size: 70px; 
+	fill: ghostwhite; 
+	visibility: hidden; 
+}
+#problemText
+{
+	font-size: 30px; 
+}
+#problemBoxAndText
+{
+	visibility: hidden; 
+}
+    </style>
+  </head>
+  <body>
+		<!--The following code will run when scripts are not enabled-->
+		<noscript><mark><strong><h1 style = "color: red; background-color: blue; ">This webapp uses javascript, but it is not enabled. Turn on javascript to use the app. </h1></strong></mark></noscript>
+		<h1>
+			Math Racer!
+		</h1>
+	<center>
+		<div>
+		<svg width = 525px height = 100px>
+			<!--Road-->
+			<rect width = 525px height = 100px style = "fill: darkSlateGrey; "/>
+				<!--dashed yellow line on road-->
+			<line stroke = "yellow" x1 = 0px x2 = 525px y1 = 50px y2 = 50px stroke-dasharray = 10px stroke-width = "5"></line>
+				<!--finishing line-->
+				<line stroke = "white" x1 = 480px x2 = 480px y1 = 0px y2 = 100px stroke-dasharray = 10px stroke-width = "5"></line>
+				<line stroke = "black" x1 = 480px x2 = 480px y1 = 10px y2 = 100px stroke-dasharray = 10px stroke-width = "5"></line>
+				<line stroke = "black" x1 = 485px x2 = 485px y1 = 0px y2 = 100px stroke-dasharray = 10px stroke-width = "5"></line>
+				<line stroke = "white" x1 = 485px x2 = 485px y1 = 10px y2 = 100px stroke-dasharray = 10px stroke-width = "5"></line>
+				<!--player's car-->
+			<rect id = "playerCar" y = 8px x = 10px rx = 15px ry = 10px width = 60px height = 30px style = "fill: limeGreen; "></rect>
+				<!--computer's car-->
+			<rect id = "computerCar" y = 62px x = 10px rx = 15px ry = 10px width = 60px height = 30px style = "fill: firebrick; "></rect>
+				<text x = 0 y = 75 id = "winText">
+					Player Wins!
+				</text>
+		</svg>
+		</div>
+	</center>
+		<center><div>
+			<svg id = "problemBoxAndText">
+				<!--problem textbox-->
+				<rect id = "problemBox" width = 300px y = 20px height = 40px style = "fill: dimgray; "/>
+				 <text id = "problemText" text-anchor = "middle" y = 50px x = 150px font-family="Ubuntu, sans-serif" fill="ghostWhite">Problem</text>
+			</svg>
+		</div></center>
+		<center><div>
+			<!--options-->
+			<table>
+			<tr>
+				<td>
+					<button id = "option0" onclick = "clicked = 0; if(answerIndex == clicked){playerMove += 20;	
+		document.getElementById('playerCar').setAttribute('x', playerMove); clearInterval(qtimer); 
+		timeInSeconds = 5; 
+		setTimeout(generateOptions(randomProblem(), randomNumber(5) + 1), 1000); 
+		qtimer = setInterval(timer, 1000); document.getElementById('questionTimer').innerHTML = 'You have ' + timeInSeconds + ' seconds'; }; ">Answer #1</button>
+				</td>
+				<td>
+					<button id = "option1" onclick = "clicked = 1; if(answerIndex == clicked){playerMove += 20;	
+		document.getElementById('playerCar').setAttribute('x', playerMove); clearInterval(qtimer); 
+		timeInSeconds = 5; 
+		setTimeout(generateOptions(randomProblem(), randomNumber(5) + 1), 1000); 
+		qtimer = setInterval(timer, 1000); document.getElementById('questionTimer').innerHTML = 'You have ' + timeInSeconds + ' seconds'; }; ">Answer #2</button>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<button id = "option2" onclick = "clicked = 2; if(answerIndex == clicked){playerMove += 20;	
+		document.getElementById('playerCar').setAttribute('x', playerMove); clearInterval(qtimer); 
+		timeInSeconds = 5; 
+		setTimeout(generateOptions(randomProblem(), randomNumber(5) + 1), 1000); 
+		qtimer = setInterval(timer, 1000); document.getElementById('questionTimer').innerHTML = 'You have ' + timeInSeconds + ' seconds'; }; ">Answer #3</button>
+				</td>
+				<td>
+					<button id = "option3" onclick = "clicked = 3; if(answerIndex == clicked){playerMove += 20;	
+		document.getElementById('playerCar').setAttribute('x', playerMove); clearInterval(qtimer); 
+		timeInSeconds = 5; 
+		setTimeout(generateOptions(randomProblem(), randomNumber(5) + 1), 1000); 
+		qtimer = setInterval(timer, 1000); document.getElementById('questionTimer').innerHTML = 'You have ' + timeInSeconds + ' seconds'; }; ">Answer #4</button>
+				</td>
+			</tr>
+		</table>
+			<!--Start button-->
+			<button id = "start" style = "position: relative; top: -145px;" onclick = "document.getElementById('problemBoxAndText').style.visibility = 'visible'; 
+				document.getElementById('option0').style.visibility = 'visible'; 
+				document.getElementById('option1').style.visibility = 'visible'; 
+				document.getElementById('option2').style.visibility = 'visible'; 
+				document.getElementById('option3').style.visibility = 'visible'; 
+				document.getElementById('start').style.visibility = 'hidden'; 
+				document.getElementById('questionTimer').style.visibility = 'visible'; 
+				qtimer = setInterval(timer, 1000); 
+				ctimer = setInterval(moveComputerCar, 1000); 
+				generateOptions(randomProblem(), randomNumber(5) + 1) ">Start</button>
+			<!--timerDisplay-->
+		<p id = "questionTimer" style = "position: relative; top: -238px; left: 170px; color: red; ">You have 5 seconds</p>
+			
+		</div></center>
+		<div>
+			<p id = "problemList"></p>
+			<p id = "answerList"></p>
+		</div>
+    <script>
+  //This webapp is a collaboration between AS and RR
+    console.log("This webapp is a collaboration between AS and RR"); 
+    /*declare variables*/
+    var answerIndex; 
+    var clicked; 
+    var qtimer; 
+    var ctimer; 
+    var timeInSeconds = 5; 
+    var playerMove = 10; 
+    var move = 10; 
+    var answerList = []; 
+    var problemList = []; 
+    function timer()
+    {
+    	timeInSeconds -= 1; 
+    	document.getElementById("questionTimer").innerHTML = "You have " + timeInSeconds + " seconds"; 
+    	//console.log(timeInSeconds); 
+    	if(document.getElementById("questionTimer").innerHTML == "You have 0 seconds")
+    	{
+    		clearInterval(qtimer); 
+    		timeInSeconds = 5; 
+    		setTimeout(generateOptions(randomProblem(), randomNumber(5) + 1), 1000); 
+    		qtimer = setInterval(timer, 1000);
+    	}; 
+    }
+    /*function from MDN web docs https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random*/
+    function randomNumber(max)
+    	{
+    		return String(Math.floor(Math.random() * max)); 
+    	}
+    function randomSign()
+    	{
+    		randInt = randomNumber(100); 
+    		if(randInt <= 25)
+    		{
+    			return "+"; 
+    		}
+    		else if(randInt <= 50)
+    		{
+    			return "-"; 
+    		}
+    		else if(randInt <= 75)
+    		{
+    			return "*"; 
+    		}
+    		else
+    		{
+    			return "/"; 
+    		}
+    	}
+    function randomProblem()
+    	{
+    		problem = randomNumber(100) + randomSign() + randomNumber(100); 
+    		document.getElementById("problemText").innerHTML = problem; 
+    		return problem + "=" + math.compile(problem).evaluate(); 
+    	}
+    function generateOptions(problemAnswer, randomMethodNumber)
+    	{
+    		if(randomMethodNumber == 0)
+    		{
+    			randomMethodNumber = randomNumber(4); 
+    		}
+    		problem = problemAnswer.slice(0, problemAnswer.indexOf("=")); 
+    		//console.log(problem); 
+    		problemList.push(problemAnswer); 
+    		answer = parseInt(problemAnswer.slice(problemAnswer.indexOf("=") + 1)); 
+    		//console.log(answer); 
+    		answerList.push(answer); 
+    		var choices = [answer.toPrecision(3), randomNumber(100) + randomMethodNumber, (randomMethodNumber % answer).toPrecision(3), answer * 3.14 * randomNumber(4) + randomMethodNumber]; 
+    		//console.log(choices); 
+    		for(var s = 0; s < randomNumber(100); s++)
+    			{
+    				var randomIndex1 = randomNumber(4); 
+    				var randomIndex2 = randomNumber(4); 
+    				if(randomIndex1 === randomIndex2)
+    				{
+    					continue; 
+    				}
+    				var itemToMove1 = choices[randomIndex1]
+    				var itemToMove2 = choices[randomIndex2]
+    				choices[randomIndex1] = itemToMove2; 
+    				choices[randomIndex2] = itemToMove1; 
+    			}
+    		//console.log(choices); 
+    		for(var z = 0; z < choices.length; z++)
+    			{
+    				document.getElementById("option" + z).innerHTML = choices[z]; 
+    			}
+    		answerIndex = choices.indexOf(answer.toPrecision(3)); 
+    		//console.log(answerIndex); 
+    	}
+    function moveComputerCar()
+    	{	
+    		move += 5; 	document.getElementById("computerCar").setAttribute('x', move); 
+    		//console.log(move); 
+    		if(move >= 420)
+    		{
+    			clearInterval(ctimer); 
+    			win("Computer"); 
+    		}
+    		if(playerMove >= 420)
+    		{
+    			clearInterval(ctimer); 
+    			win("Player"); 
+    		}
+    	}
+    function win(winner)
+    {
+    	document.getElementById('winText').style.visibility = 'visible';
+    	document.getElementById('winText').innerHTML = winner + ' Wins!'; 
+    	document.getElementById('option0').style.visibility = 'hidden'; 	
+    	document.getElementById('option1').style.visibility = 'hidden'; 	
+    	document.getElementById('option2').style.visibility = 'hidden'; 	
+    	document.getElementById('option3').style.visibility = 'hidden'; 	
+    	document.getElementById("questionTimer").style.visibility = "hidden"; 
+    	clearInterval(qtimer); 
+    	document.getElementById("problemText").innerHTML = "Scroll down to see the problems and answers";
+    	document.getElementById("problemText").style.fontSize = 13; 
+    	document.getElementById("problemList").innerHTML = "problems: " + problemList; 
+    	document.getElementById("answerList").innerHTML = "answers: " + answerList; 
+    		}
+     
+    console.log("# Game description"); 
+
+    console.log("Do math problems to advance your car before the other car gets to the finishing line!"); 
+
+    console.log("## Game rules"); 
+
+    console.log("### Math problems"); 
+
+    console.log("Each problem is randomized and the numbers are similar to the answer. "); 
+
+    console.log("Each problem must be done under 5 seconds or you will miss an opportunity to advance your car. "); 
+
+    console.log("If you get a question wrong, then it will move on to the next question without advancing your car. "); 
+
+    console.log("The problems will include addition, subtraction, multiplication, and division. "); 
+
+    console.log("There will be another car that will be racing alongside your car. This car will go at a constant speed. "); 
+
+    console.log("The problems will vary from multiplication, division, addition, and/or subtraction. "); 
+    </script>
+  </body>
+</html>
